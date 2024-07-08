@@ -283,7 +283,7 @@ class CoroutineSpeedup:
         template_ = ot.generate_markdown_template(
             content="".join(list(file_obj.values())))
         # 存储 Markdown 模板文件
-        ot.storage(template_, obj_="database")
+        # ot.storage(template_, obj_="database")
 
         return template_
 

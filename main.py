@@ -2,6 +2,8 @@
 # -*- encoding: utf-8 -*-
 """
 @File    :   daily_arxiv.py
+@update     20240709
+@update by wanghaisheng
 @Time    :   2021-10-29 22:34:09
 @Author  :   Bingjie Yan
 @Email   :   bj.yan.pa@qq.com
@@ -138,7 +140,7 @@ class CoroutineSpeedup:
         # cols = ("id", "title", "categories", "abstract", "doi", "created", "updated", "authors")
         # df = pd.DataFrame(output, columns=cols)
         res = arxiv.Search(
-            query="abs:"+keyword_,
+            query="ti:"+keyword_+"+OR+abs:"+keyword_,
             max_results=self.max_results,
             sort_by=arxiv.SortCriterion.SubmittedDate
         ).results()
@@ -187,7 +189,7 @@ class CoroutineSpeedup:
             paper_title=paper_title.replace("'","\'")
             paper_url = result.entry_id
             paper_abstract= result.summary.strip().replace('\n',' ').replace('\r'," ")
-            print(paper_abstract)
+            print(paper_title)
             code_url = base_url + paper_id
             paper_first_author = result.authors[0]
 
@@ -283,7 +285,7 @@ class CoroutineSpeedup:
         template_ = ot.generate_markdown_template(
             content="".join(list(file_obj.values())))
         # 存储 Markdown 模板文件
-        # ot.storage(template_, obj_="database")
+        ot.storage(template_, obj_="database")
 
         return template_
 
@@ -391,15 +393,15 @@ class _OverloadTasks:
             # https://github.com/Nipun1212/Claude_api
         paper_contents= f"---\n" \
         f"layout: '../../layouts/MarkdownPost.astro'\n" \
-        f"title: '{post_title}'\n" \
-        f"pubDate: '{post_pubdate}'\n" \
+        f'title: "{post_title}"\n' \
+        f'pubDate: "{post_pubdate}"\n' \
         f"description: ''\n" \
-        f"author: '{editor_name}'\n" \
+        f'author: "{editor_name}"\n' \
         f"cover:\n" \
         f"    url: 'https://www.apple.com.cn/newsroom/images/product/homepod/standard/Apple-HomePod-hero-230118_big.jpg.large_2x.jpg'\n" \
         f"    square: 'https://www.apple.com.cn/newsroom/images/product/homepod/standard/Apple-HomePod-hero-230118_big.jpg.large_2x.jpg'\n" \
         f"    alt: 'cover'\n" \
-        f"tags: '{post_tags}' \n" \
+        f'tags: "{post_tags}" \n' \
         f"theme: 'light'\n" \
         f"featured: true\n" \
         f"\n" \

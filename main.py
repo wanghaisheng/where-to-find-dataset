@@ -37,6 +37,7 @@ from config import (
     SERVER_PATH_STORAGE_BACKUP,
     TIME_ZONE_CN,
 render_style,
+searchcondition,
     topic,
 editor_name,
     logger
@@ -139,7 +140,7 @@ class CoroutineSpeedup:
         # cols = ("id", "title", "categories", "abstract", "doi", "created", "updated", "authors")
         # df = pd.DataFrame(output, columns=cols)
         res = arxiv.Search(
-            query="ti:"+keyword_+"+OR+abs:"+keyword_,
+            query=searchcondition+keyword_ if searchcondition else keyword_,
             max_results=self.max_results,
             sort_by=arxiv.SortCriterion.SubmittedDate
         ).results()

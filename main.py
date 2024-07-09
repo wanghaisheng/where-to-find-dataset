@@ -36,6 +36,7 @@ from config import (
     SERVER_PATH_STORAGE_MD,
     SERVER_PATH_STORAGE_BACKUP,
     TIME_ZONE_CN,
+render_style,
     topic,
 editor_name,
     logger
@@ -611,14 +612,15 @@ class Scaffold:
 
         # Overload tasks
         template_ = booster.overload_tasks()
-
-        # Replace project README file.
-        if env == "production":
-            with open(SERVER_PATH_README, "w", encoding="utf8") as f:
-                for i in template_:
-                    f.write(i)
-            
-            shutil.copyfile(SERVER_PATH_README, os.path.join(SERVER_PATH_DOCS, "index.md"))
+        if render_style=='mkdocs':
+    
+            # Replace project README file.
+            if env == "production":
+                with open(SERVER_PATH_README, "w", encoding="utf8") as f:
+                    for i in template_:
+                        f.write(i)
+                
+                shutil.copyfile(SERVER_PATH_README, os.path.join(SERVER_PATH_DOCS, "index.md"))
 
 if __name__ == "__main__":
     

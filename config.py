@@ -25,6 +25,7 @@ render_style3='mkdocs'
 render_style='appleblog'
 #风格博文数据库 目录根
 
+searchcondition='abs:'
 
 
 # 文件数据库 目录根

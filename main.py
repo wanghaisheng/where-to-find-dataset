@@ -2,8 +2,6 @@
 # -*- encoding: utf-8 -*-
 """
 @File    :   daily_arxiv.py
-@update     20240709
-@update by wanghaisheng
 @Time    :   2021-10-29 22:34:09
 @Author  :   Bingjie Yan
 @Email   :   bj.yan.pa@qq.com
@@ -152,19 +150,14 @@ class CoroutineSpeedup:
     def clean_paper_title(self,title):
         """
         Cleans the paper title by removing non-meaningful characters, supporting Unicode characters from various languages.
-        
-        Parameters:
-        title (str): The paper title string to be cleaned.
-        
-        Returns:
-        str: The cleaned paper title.
         """
         # Normalize the Unicode string to decompose any combined characters
         normalized_title = unicodedata.normalize('NFKD', title)
         
         # Remove non-alphanumeric characters (including non-Latin scripts)
-        # \p{L} matches any kind of letter from any language
-        cleaned_title = re.sub(r'[^\p{L}\s\d]', '', normalized_title)
+        # Using \w to match any word character (equivalent to [a-zA-Z0-9_])
+        # and adding \s to match any whitespace character.
+        cleaned_title = re.sub(r'[^\w\s]', '', normalized_title)
         
         # Replace multiple spaces with a single space
         cleaned_title = re.sub(r'\s+', ' ', cleaned_title)
@@ -173,6 +166,7 @@ class CoroutineSpeedup:
         cleaned_title = cleaned_title.strip()
         
         return cleaned_title
+
 
     def parse(self, context):
         base_url = "https://arxiv.paperswithcode.com/api/v0/papers/"
@@ -185,7 +179,7 @@ class CoroutineSpeedup:
 
             paper_id = result.get_short_id()
             paper_title = result.title
-            # paper_title=self.clean_paper_title(paper_title)
+            paper_title=self.clean_paper_title(paper_title)
             paper_title=paper_title.replace("'","\'")
             paper_url = result.entry_id
             paper_abstract= result.summary.strip().replace('\n',' ').replace('\r'," ")
@@ -351,7 +345,7 @@ class _OverloadTasks:
 
         return output_str
         
-    def _generate_markdown_table_content(self, paper: dict,tags=None):
+    def _generate_markdown_table_content_old(self, paper: dict,tags=None):
         paper['publish_time'] = f"**{paper['publish_time']}**"
         paper['title'] = f"**{paper['title']}**"
         _pdf = self._set_markdown_hyperlink(
@@ -393,15 +387,15 @@ class _OverloadTasks:
             # https://github.com/Nipun1212/Claude_api
         paper_contents= f"---\n" \
         f"layout: '../../layouts/MarkdownPost.astro'\n" \
-        f'title: "{post_title}"\n' \
-        f'pubDate: "{post_pubdate}"\n' \
+        f"title: '{post_title}'\n" \
+        f"pubDate: '{post_pubdate}'\n" \
         f"description: ''\n" \
-        f'author: "{editor_name}"\n' \
+        f"author: '{editor_name}'\n" \
         f"cover:\n" \
         f"    url: 'https://www.apple.com.cn/newsroom/images/product/homepod/standard/Apple-HomePod-hero-230118_big.jpg.large_2x.jpg'\n" \
         f"    square: 'https://www.apple.com.cn/newsroom/images/product/homepod/standard/Apple-HomePod-hero-230118_big.jpg.large_2x.jpg'\n" \
         f"    alt: 'cover'\n" \
-        f'tags: "{post_tags}" \n' \
+        f"tags: '{post_tags}' \n" \
         f"theme: 'light'\n" \
         f"featured: true\n" \
         f"\n" \
@@ -423,32 +417,6 @@ class _OverloadTasks:
         f"## QA:\n" \
         f"{paper['QA_md_contents']}\n" 
         
-        
-        
-        # paper_contents= f"---\n" \
-        # f"layout: '../../layouts/MarkdownPost.astro'\n" \
-        # f"title: '{paper['title'].replace('**','')}'\n" \
-        # f"pubDate: {str(datetime.now(TIME_ZONE_CN)).split('.')[0]}\n" \
-        # f"description: 'Automated track arxiv-daily latest papers around {topic}'\n" \
-        # f"author: 'wanghaisheng'\n" \
-        # f"cover:\n" \
-        # f"    url: '../../public/assets/{randint(1, 100)}.jpg'\n" \
-        # f"    square: '../../public/assets/{randint(1, 100)}.jpg'\n" \
-        # f"    alt: 'cover'\n" \
-        # f"tags: ['brand','brand monitor']\n" \
-        # f"theme: 'light'\n" \
-        # f"featured: true\n" \
-        # f"meta:\n" \
-        # f" - name: author\n" \
-        # f"   content: 作者是我\n" \
-        # f" - name: keywords\n" \
-        # f"   content: key3, key4\n" \
-        # f"keywords: key1, key2, key3\n" \
-        # f"---" \
-        # f"\n" \
-        # f"## authors:\r{paper['authors']} \r" \
-        # f"## publish_time:\r{paper['publish_time']} \r" \
-        # f"## abstract:\r{paper['abstract']}\n"
         if not os.path.exists(SERVER_DIR_STORAGE):
             os.makedirs(SERVER_DIR_STORAGE)
             print(f"Directory '{SERVER_DIR_STORAGE}' was created.")
@@ -460,6 +428,94 @@ class _OverloadTasks:
 
 
         return line
+    import yaml
+    
+    def _generate_yaml_front_matter(self, paper: dict, editor_name: str) -> str:
+        post_title = paper["title"]
+        post_pubdate = str(datetime.now(TIME_ZONE_CN)).split('.')[0]
+        post_tags = paper['keywords']
+    
+        front_matter = {
+            "layout": "../../layouts/MarkdownPost.astro",
+            "title": post_title,
+            "pubDate": post_pubdate,
+            "description": "",
+            "author": editor_name,
+            "cover": {
+                "url": "https://www.apple.com.cn/newsroom/images/product/homepod/standard/Apple-HomePod-hero-230118_big.jpg.large_2x.jpg",
+                "square": "https://www.apple.com.cn/newsroom/images/product/homepod/standard/Apple-HomePod-hero-230118_big.jpg.large_2x.jpg",
+                "alt": "cover"
+            },
+            "tags": post_tags,
+            "theme": "light",
+            "featured": True,
+            "meta": [
+                {"name": "author", "content": paper['authors']},
+                {"name": "keywords", "content": "key3, key4"}
+            ],
+            "keywords": "key1, key2, key3"
+        }
+    
+        yaml_front_matter = yaml.safe_dump(front_matter, default_flow_style=False)
+    
+        return f"---\n{yaml_front_matter}---\n"
+    def _generate_markdown_content(self, paper: dict, pdf_link: str) -> str:
+        markdown_content = (
+            f"# title: {paper['title']} \n"
+            f"## publish date: \n{paper['publish_time']} \n"
+            f"## authors: \n  {paper['authors']} \n"
+            f"## abstract: \n  {paper['abstract']} \n"
+            f"## paper id\n"
+            f"{paper['id']}\n"
+            f"## download\n"
+            f"{pdf_link}\n"
+            f"## abstracts:\n"
+            f"{paper['abstract']}\n"
+            f"## QA:\n"
+            f"{paper['QA_md_contents']}\n"
+        )
+
+        return markdown_content
+
+    def _generate_markdown_table_content(self, paper: dict,tags=None):
+        # Formatting fields
+        paper['publish_time'] = f"**{paper['publish_time']}**"
+        # paper['title'] = f"**{paper['title']}"
+        paper['keywords'] = list(set(tags))
+        QA_md_link =f"https://github.com/taesiri/ArXivQA/blob/main/papers/{paper['id']}.md"
+        paper['QA_md_contents']=ToolBox.handle_md(QA_md_link)
+        if paper['QA_md_contents']==None:
+            print('gen realtime')
+            paper['QA_md_contents']='coming soon'
+            # https://huggingface.co/spaces/taesiri/ClaudeReadsArxiv
+            # https://github.com/Nipun1212/Claude_api        
+        pdf_link = self._set_markdown_hyperlink(text=paper['id'], link=paper['paper_url'])
+
+        # Generate YAML front matter
+        yaml_front_matter = self._generate_yaml_front_matter(paper, editor_name)
+
+        # Generate Markdown content
+        markdown_content = self._generate_markdown_content(paper, pdf_link)
+
+        paper_contents= f"{yaml_front_matter}\n{markdown_content}"
+        postname=self._check_for_illegal_char(paper['title'])
+        postname=postname.replace(' ','_')
+        ## if filename start with __ ,astro post will 404
+        if postname.startswith('__'):
+            postname=postname.replace('__',"")
+        paper_path_appleblog=SERVER_PATH_STORAGE_MD.format(postname)
+        repo_url=os.getenv('repo')
+        repo_name=repo_url.split('/')[-1].replace('-',' ')        
+        if not os.path.exists(SERVER_DIR_STORAGE):
+            os.makedirs(SERVER_DIR_STORAGE)
+            print(f"Directory '{SERVER_DIR_STORAGE}' was created.")
+        else:
+            print(f"Directory '{SERVER_DIR_STORAGE}' already exists.")
+
+        with open(paper_path_appleblog, "w", encoding="utf8") as f:
+                f.write(paper_contents)      
+
+
 
     @staticmethod
     def _set_style_to(style: str = "center"):

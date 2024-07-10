@@ -1,3 +1,9 @@
+slug
+
+https://github.com/awesomedata/awesome-public-datasets
+
+
+
 风格样式选择
 
 1.mkdocs 

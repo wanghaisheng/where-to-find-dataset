@@ -1,3 +1,5 @@
+https://huggingface.co/datasets
+
 https://github.com/awesomedata/awesome-public-datasets
 
 

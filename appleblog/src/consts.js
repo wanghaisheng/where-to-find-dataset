@@ -1,8 +1,8 @@
-export const SITE_TITLE = `Arxiv paper daily track`;
+export const SITE_TITLE = `where to find dataset  Arxiv paper daily track`;
 export const SITE_DESCRIPTION = 'Site Description';
 export const SITE_EMAIL = 'admin@tiktokastudio.com'
-export const SITE_NAME = 'arxivpaper.tiktokastudio.com';
-export const SITE_URL = "https://arxivpaper.tiktokastudio.com";
+export const SITE_NAME = 'https://dataset-finder.borninsea.com';
+export const SITE_URL = "https://dataset-finder.borninsea.com";
 export const SITE_LANG = "zh-CN";
 
 // Author, used only when author is not specified on the page, 

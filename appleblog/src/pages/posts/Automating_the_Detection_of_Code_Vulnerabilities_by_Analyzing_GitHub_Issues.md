@@ -13,10 +13,10 @@ meta:
   name: author
 - content: key3, key4
   name: keywords
-pubDate: '2025-01-12 17:14:25'
+pubDate: '2025-01-12 17:15:19'
 tags:
-- all search terms
 - dataset
+- all search terms
 theme: light
 title: Automating the Detection of Code Vulnerabilities by Analyzing GitHub Issues
 ---

@@ -13,10 +13,10 @@ meta:
   name: author
 - content: key3, key4
   name: keywords
-pubDate: '2025-01-12 17:14:22'
+pubDate: '2025-01-12 17:15:19'
 tags:
-- all search terms
 - dataset
+- all search terms
 theme: light
 title: Comparison Study Glacier Calving Front Delineation in Synthetic Aperture Radar
   Images With Deep Learning

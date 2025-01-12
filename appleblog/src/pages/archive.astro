@@ -2,7 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ArchivePostList from "../layouts/ArchivePostList.astro";
 const allPosts = await Astro.glob("./posts/*.md");
-const tags = ['smart watch','smart band','smart ring'];
+const uniqueTags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())]
+    .filter(tag => tag && tag.trim() !== ""); // Filter out empty and null tags
+
 const posts = [];
 
 tags.forEach((tag) => {

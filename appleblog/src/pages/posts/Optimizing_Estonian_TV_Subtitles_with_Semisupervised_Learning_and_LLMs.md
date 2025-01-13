@@ -13,10 +13,10 @@ meta:
   name: author
 - content: key3, key4
   name: keywords
-pubDate: '2025-01-12 17:17:19'
+pubDate: '2025-01-13 11:37:53'
 tags:
-- dataset
 - all search terms
+- dataset
 theme: light
 title: Optimizing Estonian TV Subtitles with Semisupervised Learning and LLMs
 ---

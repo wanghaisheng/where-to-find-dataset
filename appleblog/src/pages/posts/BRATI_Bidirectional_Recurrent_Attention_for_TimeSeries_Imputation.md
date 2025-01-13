@@ -13,10 +13,10 @@ meta:
   name: author
 - content: key3, key4
   name: keywords
-pubDate: '2025-01-12 17:17:12'
+pubDate: '2025-01-13 11:37:48'
 tags:
-- dataset
 - all search terms
+- dataset
 theme: light
 title: BRATI Bidirectional Recurrent Attention for TimeSeries Imputation
 ---

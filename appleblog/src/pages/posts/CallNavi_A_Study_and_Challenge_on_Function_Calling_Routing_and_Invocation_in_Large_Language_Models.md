@@ -13,10 +13,10 @@ meta:
   name: author
 - content: key3, key4
   name: keywords
-pubDate: '2025-01-12 17:17:16'
+pubDate: '2025-01-13 11:37:51'
 tags:
-- dataset
 - all search terms
+- dataset
 theme: light
 title: CallNavi A Study and Challenge on Function Calling Routing and Invocation in
   Large Language Models

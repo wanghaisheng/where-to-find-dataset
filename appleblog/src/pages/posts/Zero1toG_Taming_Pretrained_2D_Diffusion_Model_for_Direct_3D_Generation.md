@@ -13,10 +13,10 @@ meta:
   name: author
 - content: key3, key4
   name: keywords
-pubDate: '2025-01-12 17:17:10'
+pubDate: '2025-01-13 11:37:47'
 tags:
-- dataset
 - all search terms
+- dataset
 theme: light
 title: Zero1toG Taming Pretrained 2D Diffusion Model for Direct 3D Generation
 ---
